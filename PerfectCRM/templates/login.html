@@ -1,0 +1,41 @@
+
+{% extends 'index.html' %}
+  {% block css %}
+<style>
+      .col-center-block {
+    float: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}</style>
+    {% endblock %}
+
+{% block body %}
+  <body>
+
+    <div class="container">
+    <div class="row">
+        <div class="col-xs-6 col-md-4 col-center-block">
+      <form class="form-signin " method="post">{% csrf_token %}
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      </form>
+        </div>
+    <!-- /container -->
+    </div>
+
+    {% endblock %}
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+
+
+    {% block script %}
+{% endblock %}

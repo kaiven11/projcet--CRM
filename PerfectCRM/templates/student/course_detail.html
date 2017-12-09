@@ -1,0 +1,48 @@
+{%  extends 'index.html' %}
+{% load stu_tags %}
+{% block page-content %}
+
+    <div class="panel panel-default">
+          <div class="panel-heading">我的课程</div>
+          <div class="panel-body">
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>课程名称</th>
+                        <th>所报班级</th>
+                        <th>课程顾问</th>
+                        <th>已学课程</th>
+                        <th>该科成绩</th>
+                        <th>作业详情</th>
+
+                    </tr>
+
+
+
+                </thead>
+                <tbody>
+                   {% for i in study_record %}
+                <tr>
+                    <td>{{ i.course_record.from_class.course }}</td>
+                    <td>{{ i.course_record.from_class }}</td>
+                    <td>{{ enroll_ment.consultant }}</td>
+                    <td>{{ i.course_record }}</td>
+                    <td>{{ i.score }}</td>
+                    <td><a href="{% url "homework_detail" i.id %}"> 作业提交 </a></td>
+                </tr>
+
+                  {% endfor %}
+
+                </tbody>
+
+
+            </table>
+
+
+
+          </div>
+    </div>
+
+
+{% endblock %}
