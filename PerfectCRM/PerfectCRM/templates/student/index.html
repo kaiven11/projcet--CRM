@@ -1,0 +1,51 @@
+{%  extends 'index.html' %}
+{% load stu_tags %}
+{% block page-content %}
+
+    <div class="panel panel-default">
+          <div class="panel-heading">我的课程</div>
+          <div class="panel-body">
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>课程名称</th>
+                        <th>所报班级</th>
+                        <th>课程顾问</th>
+                        <th>已学课程</th>
+                        <th>该科成绩</th>
+                        <th>作业管理</th>
+
+                    </tr>
+
+
+
+                </thead>
+                <tbody>
+                   {% for i in request.user.stu_obj.enrollment_set.all %}
+                <tr>
+                    <td>{{ i.enrolled_class.course }}</td>
+                    <td>{{ i.enrolled_class }}</td>
+                    <td>{{ i.consultant }}</td>
+                    <td>{% conut_study i request.user  %}节</td>
+                  {% sum_grade i as aa  %}
+{#                    as a 是作为分配标签使用，标签共分为三种，简单标签，内联标签，分配标签#}
+                    <td>{{ aa.score__sum }}</td>
+{#                    detail/{{ i.id }}/{{ i.enrolled_class.id }}#}
+                    <td><a href="{% url "stu_detail" i.id i.enrolled_class.id %}"> 课程详情 </a></td>
+                </tr>
+
+                  {% endfor %}
+
+                </tbody>
+
+
+            </table>
+
+
+
+          </div>
+    </div>
+
+
+{% endblock %}

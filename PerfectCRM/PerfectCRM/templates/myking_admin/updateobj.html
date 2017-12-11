@@ -1,0 +1,158 @@
+{% extends "index.html" %}
+
+  {% block css %}
+    <style>
+      .fileter_box{
+      width:200px !important;
+      height:200px !important;
+      }
+</style>
+  {% endblock %}
+
+{% load tagss %}
+{% block page-content %}
+
+
+
+    <form class="form-horizontal" method="POST" onsubmit="return select_all_data()">{% csrf_token %}
+  <span style="color: red">{{ sp_obj.errors }}</span>
+
+        {% for fileds in sp_obj %}
+
+
+
+     <div class="form-group">
+         <label class="col-sm-2 control-label">{{ fileds.label }}</label>
+
+{#            {% man fileds %}#}
+
+{#         判断是否在多对多的关系时，显示textarea 可以动态的配置#}
+{#            {{ admin_class.filter_horizontal }}#}
+
+{#     判断是否时只读字段#}
+
+
+           {% if fileds.name in  admin_class.filter_horizontal %}
+               {% fields_item_list fileds.name admin_class sp_obj  as tags_list %}
+{#               {% selected_list sp_obj admin_class %}#}
+               {% selected_list sp_obj fileds.name as selected_item%}  <!--实现将当前的ID所选择的tag标签 和未选择的做成两个select 的标签 -->
+
+                <div class="col-sm-10">
+
+                <select class="fileter_box" id="s1"  name="{{ fileds.name }}_from" multiple>
+                 {% for k,v in tags_list %}
+                        <option  value="{{ v.id }}">{{ v }}</option>
+                 {% endfor %}
+                </select>
+
+                 <select class="fileter_box" id="s2"  name="{{ fileds.name }}" multiple>
+                 {% for k,v in selected_item %}
+                        <option   value="{{ v.id }}">{{ v }}</option>
+                 {% endfor %}
+                </select>
+
+                </div>
+
+
+
+
+
+
+
+        {% else %}
+
+        <div class="col-sm-10">
+            {{ fileds }}
+            <div class="row ">
+                <div class="col-sm-10">
+            {{ fileds.help_text }}</div></div>
+        </div>
+     {% endif %}
+     </div>
+
+
+  {% endfor %}
+
+    {% if not admin_class.readonly_table %}
+
+    <div class="pull-right col-sm-pull-11">
+        <button type="submit" class="btn btn-success" >Save</button>
+    </div>
+
+    {% endif %}
+</form>
+
+
+
+
+
+
+{% endblock %}
+
+
+{% block script %}
+
+    <script>
+      $(function () {
+
+          $('#s1').delegate('option', 'dblclick', function () {
+              var val_text=$(this).text()
+              console.log(val_text)
+
+{#              console.log()#}
+              str2='#s2 '
+                str2+=':contains('+val_text+')'
+              console.log(str2)
+              if($(str2).length<1){
+                  $(this).appendTo($('#s2'))
+              }
+              else{$(str2).remove()
+                  $(this).appendTo($('#s2'))
+
+              }
+
+
+          })
+
+              $('#s2').delegate('option', 'dblclick', function () {
+              var val_text=$(this).text()
+              console.log(val_text)
+
+{#              console.log()#}
+              str2='#s1 '
+                str2+=':contains('+val_text+')'
+              console.log(str2)
+              if($(str2).length<1){
+                  $(this).appendTo($('#s1'))
+              }
+              else{$(str2).remove()
+                  $(this).appendTo($('#s1'))
+
+              }
+
+
+          })
+
+
+
+
+
+      })
+      function select_all_data() {
+              $('#s2').children('option').each(function () {
+
+                            $(this).prop("selected",true);
+
+                    })
+
+
+          $('form :disabled').prop('disabled',false)
+        return true;
+          }
+
+
+
+    </script>
+
+
+{% endblock %}
