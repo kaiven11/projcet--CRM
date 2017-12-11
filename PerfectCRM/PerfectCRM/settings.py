@@ -143,3 +143,5 @@ AUTH_USER_MODEL = 'crm.UserProfile'  #installed app , 上面的值表示Django�
 LOGIN_URL='/account/login'
 
 UPLOAD_URL=os.path.join(BASE_DIR,"crm/upload")
+UPLOAD_HOME_WORK_URL=os.path.join(BASE_DIR,"crm/homeworks")
+

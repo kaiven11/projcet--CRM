@@ -46,7 +46,7 @@
 
         {% for  role in request.user.roles.all %}
           {% for menu in role.menus.all %}
-            <li class="col-lg-2"><a href="{% if not menu.type %}{%  url  menu.url_name %} {% else %}{{ menu.url_name }}{% endif %}">{{ menu.name }}</a></li>
+            <li ><a href="{% if not menu.type %}{%  url  menu.url_name %} {% else %}{{ menu.url_name }}{% endif %}">{{ menu.name }}</a></li>
           {% endfor %}
         {% endfor %}
 

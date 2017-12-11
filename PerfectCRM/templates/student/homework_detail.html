@@ -6,6 +6,9 @@
           <div class="panel-heading">我的课程</div>
           <div class="panel-body">
 
+
+          <a href="javacript:void(0)" onclick="window.history.back()">返回</a>
+
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -41,17 +44,34 @@
 
                   {% if i.course_record.has_homework %}
 
-                             <form class="dropzone" id="filedropzone" action="{{ request.path }}" style="height: 250px;border: dashed 1px lightblue">{% csrf_token %}
 
 
-                Drop files here or click to upload.<br>
+                <!--    如过该节课程有作业的话  -->
 
 
-         </form>
+                              <span style="font-weight: 800;font-size: 16px;">本次作业标题:{{ i.course_record.homework_title }}</span>
+
+                              <pre style="height: 400px;overflow: auto">{{ i.course_record.homework_content }}</pre>
 
 
+                            <p>请上传作业:</p>
+
+                             <form class="dropzone" id="filedropzone" action="{{ request.path }}" style="height: 100px;border: dashed 1px lightblue">{% csrf_token %}
+
+
+
+                             </form>
+
+                            <button type="button" class="btn btn-success pull-right" id="btUploadAll">提交</button>
+
+
+                  {% else %}
+
+                      <h2>本次无作业！</h2>
 
                  {% endif %}
+
+
 
 
 
@@ -83,23 +103,58 @@
             addRemoveLinks: true, //是否条件删除文件的链接
             dictRemoveLinks: "x",
             dictCancelUpload: "x",
-            maxFiles: 2, //文件数量
-            maxFilesize: 5, //每个文件的大小
-            uploadMultiple:true, // 是否允许一次提交多个文件
-             acceptedFiles:'image/*', //接受的文件类型
+            maxFiles: 1, //文件数量
+            maxFilesize: 1000, //每个文件的大小
+            uploadMultiple:false, // 是否允许一次提交多个文件
+             acceptedFiles:'.zip', //接受的文件类型
+                 dictDefaultMessage: "拖拽图片或者点击",
+            dictFileTooBig: "图片最大5M",
+            dictInvalidFileType: "只能上传图片",
+            dictRemoveFile: "移除",
+             autoProcessQueue: false,
                init: function() {
+                 var btUploadAll = $("#btUploadAll"); //这里为了使用jqeury的一些方法
+        var submitButton = document.getElementById("btUploadAll")
+{#        mydropzone = this; // closure#}
+        //为上传按钮添加点击事件
+        submitButton.addEventListener("click", function () {
+            btUploadAll.attr("disabled", true);
+            //手动上传所有图片
+            mydropzone.processQueue();
+        });
 
-                 this.on("error",function (file) {
-                     alert('上穿的文件不是合法的格式！！');
+        //当添加图片后的事件，上传按钮恢复可用
+        this.on("addedfile", function () {
+            btUploadAll.removeAttr("disabled");
 
-                 })
+        });
             this.on("success", function(file) {
                 console.log("File " + file.name + "uploaded");
             });
             this.on("removedfile", function(file) {
                 console.log("File " + file.name + "removed");
             });
+
+                   
+            this.on("uploadprogress",function (file,progress ,bytesSent) {
+
+                $('.dz-details').after("<span class='tt'></span>").text(parseInt(progress))
+                if (parseInt(progress)==100){
+                     $('.dz-details').empty().append("<span>上传成功！</span>")
+                }
+
+
+            })
+        
+
+
+
         }
+
+
+
+
+
 
 
         })
