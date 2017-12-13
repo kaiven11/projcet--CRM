@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import (
-    BaseUserManager, AbstractBaseUser
+    BaseUserManager, AbstractBaseUser,PermissionsMixin
 )
 
 from django.utils.safestring import mark_safe
@@ -259,7 +259,7 @@ class MyUserManager(BaseUserManager):
         return user
 
 
-class UserProfile(AbstractBaseUser):
+class UserProfile(AbstractBaseUser,PermissionsMixin):
     email = models.EmailField(
         verbose_name='email address',
         max_length=255,
@@ -303,6 +303,8 @@ class UserProfile(AbstractBaseUser):
         # Simplest possible answer: All admins are staff
         return self.is_admin
 
+    class Meta:
+        permissions = ()
 
 
 class Role(models.Model):

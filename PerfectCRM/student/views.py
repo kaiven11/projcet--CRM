@@ -2,12 +2,20 @@ from django.shortcuts import render,HttpResponse
 from crm import models
 import os
 from PerfectCRM import settings
+from django.contrib.auth.decorators import login_required
 # Create your views here.
+from crm.permissions import permission
 
 
+
+@permission.check_permission
+#学生首页 login
 def index(request):
     return render(request,"student/index.html")
 
+
+#学生详细信息
+@permission.check_permission
 
 def stu_detail(request,enroll_id,class_id):
     enroll_obj=models.Enrollment.objects.get(id=enroll_id)
@@ -16,7 +24,7 @@ def stu_detail(request,enroll_id,class_id):
     study_records=models.StudyRecord.objects.filter(student=enroll_obj,course_record__in=course_obj)
     print(study_records)
     return render(request,"student/course_detail.html",{'study_record':study_records,'enroll_ment':enroll_obj})
-
+@permission.check_permission
 
 def homework_detail(request,study_record_id):
     stu_obj=models.StudyRecord.objects.get(id=study_record_id)

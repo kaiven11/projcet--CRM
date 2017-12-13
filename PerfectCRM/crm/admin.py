@@ -6,6 +6,11 @@ from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.contrib.auth.models import (
+    BaseUserManager, AbstractBaseUser,PermissionsMixin
+)
+
+
 
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ('id','qq','source','consultant','content','status','date')
@@ -76,8 +81,8 @@ class UserProfileAdmin(BaseUserAdmin):
     list_filter = ('is_admin',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal', {'fields': ('name','stu_obj')}),
-        ('Permissions', {'fields': ('is_admin',"is_active","roles",)}),
+        ('Personal info', {'fields': ('name','stu_obj')}),
+        ('Permissions', {'fields': ('is_admin',"is_active",'is_superuser',"roles","user_permissions","groups")}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
@@ -89,7 +94,7 @@ class UserProfileAdmin(BaseUserAdmin):
     )
     search_fields = ('email',)
     ordering = ('email',)
-    filter_horizontal = ("roles",)
+    filter_horizontal = ("roles","user_permissions","groups")
 
 class EnrollMentAdmin(admin.ModelAdmin):
     list_display = ['id','customer','enrolled_class','contract_agreed']
@@ -116,4 +121,5 @@ admin.site.register(models.Tag)
 admin.site.register(models.UserProfile,UserProfileAdmin)
 admin.site.register(models.Menu)
 admin.site.register(models.Contract,ContractAdmin)
+# admin.site.register(models.Permission)
 

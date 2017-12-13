@@ -4,11 +4,13 @@ from django.db.models import Q
 from newkindadmin import myadmin
 
 from django.contrib.auth.decorators import login_required
-
+from crm.permissions import permission
 from crm.backend.error_list import  *
 
 # Create your views here.
 from newkindadmin.myadmin import *
+
+@permission.check_permission
 @login_required
 def index(request):
 
@@ -16,6 +18,7 @@ def index(request):
         'obj':a,
     })
 
+@permission.check_permission
 @login_required
 def dis_obj(request,app_name,table_name):
     #找到admins，得到model对象
@@ -123,6 +126,7 @@ def dis_obj(request,app_name,table_name):
 
 #更新数据
 
+@permission.check_permission
 @login_required
 def update_data(request,app_name,table_name,obj_id):
 
@@ -149,6 +153,7 @@ def update_data(request,app_name,table_name,obj_id):
         return render(request, 'myking_admin/updateobj.html', {'sp_obj': form_obj(instance=instance_obj), 'admin_class': admins})
 
 
+@permission.check_permission
 @login_required
 def add_data(request,app_name,table_name):
     admins = query_set_dic[app_name][table_name]
@@ -173,6 +178,7 @@ def add_data(request,app_name,table_name):
 
 #修改密码
 
+@permission.check_permission
 @login_required
 def change_password(request,app_name,table_name,user_id):
     admins = query_set_dic[app_name][table_name]
